@@ -1,0 +1,54 @@
+abs cals
+	transmitter
+	receiver
+	channel
+
+Data_generation
+	
+PSK
+	Data generation
+	BPSK (data)
+		-Tx (with plot)
+		-AWGN Channel (with plot)
+		-Rx (with plot)
+
+	QPSK
+
+	8PSK
+
+	16PSK
+
+FSK
+	BFSK
+
+ASK
+
+
+gnerated signal
+scatterplot
+
+noisy signal
+scatterplot
+
+received signal
+
+
+
+Input 
+	generate in code
+	(generate image data)
+	(binary data from user)
+	(image from user)
+	
+Abstraction
+Polymorphism
+Encapsulation
+
+class a()
+	init (self, data )
+	se
+	mz ()
+		self.data()
+
+c = a(data)
+c.mz()
