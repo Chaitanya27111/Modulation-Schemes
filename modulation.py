@@ -6,6 +6,7 @@ Created on Wed Nov  3 22:08:20 2021
 """
 import random
 import numpy as np
+import math
 from abc import ABC, abstractmethod
 from matplotlib import pyplot as plt
 
@@ -20,17 +21,16 @@ class AbstractClass:
     def channel (self, trans_data):
         pass    
     
-
 class bpsk (AbstractClass):
     
     def __init__(self, data_type, n):
         #self.__data = 0  # make the data private
-        self.data_type = data_type
-        self. n = n
-        self.trans_data = 0
+        self.data_type = data_type # type of data- bits or image
+        self. n = n # no. of bits in the data
+        self.trans_data = 0 # transmitted data
         self.snrdb = 0
     
-    def data_generator (data_type, n):
+    def data_generator (self, data_type, n):
         '''
 
         Parameters
@@ -54,7 +54,7 @@ class bpsk (AbstractClass):
 
         
     def transmitter (self):
-        self.__data = np.array(data_generator(self.data_type, self.n)) 
+        self.__data = np.array(self.data_generator(self.data_type, self.n)) 
         self.__data = 2*self.__data-1 # bit mapping
         print (f"Transmitted data : {self.__data}")
         
@@ -126,13 +126,36 @@ class bpsk (AbstractClass):
         
     def ber_vs_snr(self):
         ber = np.zeros(20)
+        bera = np.zeros(20)
         for i in range (20):
-            b.transmitter()
-            y = b.channel(i)
-            b.receiver()
-            ber[i] = b.plotting()
-            
+            '''
+            self.transmitter()
+            y = self.channel(i)
+            self.receiver()
+            ber[i] = self.plotting()
+            '''
+            snr = 10**(i/10)
+            bera[i] = 0.5*math.erfc(np.sqrt(snr/2))
         #plt.semilogy(np.arange(20), ber)
-        plt.semilogy(np.arange(20),ber,color='r',marker='o',linestyle='-')
+        print (bera)
+        plt.semilogy(np.arange(20),bera,color='r',marker='o',linestyle='-', label = "QPSK")
+        plt.title ("QPSK")
+        plt.ylabel ("BER")
+        plt.xlabel ("SNR db")
+        plt.legend (loc = 1)
+        #plt.xlim (0, 20)
+        #plt.ylim (1e-20, 1)
+        plt.show()
+        #plt.semilogy(np.arange(20),ber,color='r',marker='o',linestyle='-')
         
-        
+b = bpsk("bits", 1000)
+'''
+b.transmitter()
+y = b.channel(2)
+b.receiver()
+b.plotting()'''
+b.ber_vs_snr()
+
+
+    
+      
