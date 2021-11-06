@@ -92,7 +92,11 @@ class bpsk (AbstractClass):
             trans_wave = np.append(trans_wave, self.__data[i]*phi )
             
         
-        plt.plot (range(len(t)*len(self.__trans_data)), trans_wave)
+        plt.plot (range(len(t)*len(self.__trans_data)), trans_wave, label = "Transmitted signal")
+        plt.title ("QPSK")
+        plt.xlabel ("t")
+        plt.ylabel ("Amplitude")
+        plt.legend (loc = 1)
         plt.show()
         
         # plotting the detected wave
@@ -101,8 +105,12 @@ class bpsk (AbstractClass):
         self.__detected_data = 2*self.__detected_data-1
         for i in range (len(self.__detected_data)):
             detected_wave = np.append(detected_wave, self.__detected_data[i]*phi )
-        print(len(phi))
-        plt.plot (range(len(t)*len(self.__detected_data)), detected_wave)
+     
+        plt.plot (range(len(t)*len(self.__detected_data)), detected_wave, label = "Detected signal")
+        plt.title ("QPSK")
+        plt.xlabel ("t")
+        plt.ylabel ("Amplitude")
+        plt.legend (loc = 1)
         plt.show()
         
         for i in range (self.n):
@@ -126,35 +134,25 @@ class bpsk (AbstractClass):
         
     def ber_vs_snr(self):
         ber = np.zeros(20)
-        bera = np.zeros(20)
         for i in range (20):
-            '''
-            self.transmitter()
-            y = self.channel(i)
-            self.receiver()
-            ber[i] = self.plotting()
-            '''
             snr = 10**(i/10)
-            bera[i] = 0.5*math.erfc(np.sqrt(snr/2))
-        #plt.semilogy(np.arange(20), ber)
-        print (bera)
-        plt.semilogy(np.arange(20),bera,color='r',marker='o',linestyle='-', label = "QPSK")
+            ber[i] = 0.5*math.erfc(np.sqrt(snr/2))
+
+        plt.semilogy(np.arange(20),ber,color='r',marker='o',linestyle='-', label = "QPSK")
         plt.title ("QPSK")
         plt.ylabel ("BER")
         plt.xlabel ("SNR db")
         plt.legend (loc = 1)
-        #plt.xlim (0, 20)
-        #plt.ylim (1e-20, 1)
         plt.show()
-        #plt.semilogy(np.arange(20),ber,color='r',marker='o',linestyle='-')
+
         
-b = bpsk("bits", 1000)
-'''
+b = bpsk("bits", 10)
+
 b.transmitter()
 y = b.channel(2)
 b.receiver()
-b.plotting()'''
-b.ber_vs_snr()
+b.plotting()
+#b.ber_vs_snr()
 
 
     
