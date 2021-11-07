@@ -1,7 +1,7 @@
 Modulation schemes
-  -BPSK (A)
-  -QPSK (C)
-  -8PSK (C)
-  -16PSK (A)
+  -BPSK (C)
+  -QPSK (A)
+  -8PSK (A) (if time persists)
+  -16PSK (C) (if time persists)
   -AM (C)
   -FM (A)
