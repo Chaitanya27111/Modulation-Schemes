@@ -145,15 +145,103 @@ class bpsk (AbstractClass):
         plt.legend (loc = 1)
         plt.show()
 
+
+
+
         
-b = bpsk("bits", 10)
+class am (AbstractClass):
+    
+    def __init__(self):
+        #self.__data = 0  # make the data private
+        print ("To prevent overmodulation, enter Ac > Am.")
+        self.Am = float(input("Enter the amplitude of message : "))
+        self.fm = float(input("Enter the frequency of sinusoidal msg signal : "))
 
-b.transmitter()
-y = b.channel(2)
-b.receiver()
-b.plotting()
-#b.ber_vs_snr()
+        self.fc = float(input("Enter the carrier frequency : "))
+        self.Ac = float(input("Enter the carrier amplitude : "))
+        self.car_wave = []
+        self.__msg_wave = []
+    
+    def data_generator (self):    
+        if (self.Am > self.Ac):
+                print ("Overmodulation")
+        elif (self.Am < self.Ac):
+                print ("Undermodulation")
+        else:
+                print ("Am = Ac")
+        
+        t = np.linspace (0, 1, 1000)     #time interval
 
+        self.car_wave[:] = self.Ac * np.cos(2*np.pi*self.fc*t)
+        self.__msg_wave[:] = self.Am * np.cos(2*np.pi*self.fm*t)
+        
+        
+    def transmitter (self):
+        mod_index = self.Am / self.Ac
+        t = np.linspace (0, 1, 1000)
+        self.data_generator()
+        self.__data = self.Ac * (1 + mod_index*np.cos(2*np.pi*self.fm*t)) * self.Ac*np.cos (2*np.pi*self.fc*t)
+                
+        
+    def channel (self, snrdb):
+        self.snrdb = snrdb
+        snr_norm = 10**(self.snrdb/10)
+        p = snr_norm**0.5
+        self.noise = np.random.randn(len(self.__data)) 
+        self.__trans_data = p*self.__data + self.noise
+        #return self.trans_data
+    
+    
+    def receiver (self):
+        '''
+        mask = (self.trans_data >0)
+        detected_data = self.trans_data[mask]
+        '''
+        self.__detected_data = np.zeros (len(self.__data))
+        for i in range (len(self.__trans_data)):
+            if (self.__trans_data[i] > 0):
+                self.__detected_data[i] = 1
+            else:
+                self.__detected_data[i] = 0
+        print(self.__detected_data)
+        
+        
+    def plotting (self):
+        
+        t = np.linspace (0, 1, 1000)
+        
+        # plotting the message wave
+        plt.plot (t,self.__msg_wave, label = "Message wave")
+        plt.title ("Amplitude Modulation")
+        plt.xlabel ("t")
+        plt.ylabel ("Amplitude")
+        plt.legend (loc = 1)
+        plt.show()
+        
+        # plotting the carrier wave
+        plt.plot (t,self.car_wave, label = "Carrier wave")
+        plt.title ("Amplitude Modulation")
+        plt.xlabel ("t")
+        plt.ylabel ("Amplitude")
+        plt.legend (loc = 1)
+        plt.show()
+        
+        # plotting the modulated wave
+        plt.plot (t,self.__data, label = "Modulated wave")
+        plt.title ("Amplitude Modulation")
+        plt.xlabel ("t")
+        plt.ylabel ("Amplitude")
+        plt.legend (loc = 1)
+        plt.show()
+        
+        
+a = am()
+a.transmitter()
+a.plotting()
+        
+        
+    
+      
 
     
       
